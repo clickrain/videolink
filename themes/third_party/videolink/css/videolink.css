@@ -1,0 +1,27 @@
+.videolink .status {
+	padding: 5px 0;
+}
+.videolink .status:before {
+	content: "";
+	display: inline-block;
+	width: 16px;
+	height: 16px;
+	margin-right: 5px;
+	background: transparent none no-repeat center center;
+	vertical-align: middle;
+}
+.videolink .status.loading:before {
+	background-image: url(../images/loading.gif);
+}
+.videolink .status.noservice {
+
+}
+.videolink .status.success:before {
+	background-image: url(../images/success.png);
+}
+.videolink .status.error {
+	color: red;
+}
+.videolink .status.error:before {
+	background-image: url(../images/error.png);
+}
