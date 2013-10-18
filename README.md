@@ -1,11 +1,12 @@
 # Video Link
 
-Provide a fast, easy-to-use field type for adding links from YouTube and
-Vimeo.
+Video Link is a Field Type add-on for ExpressionEngine that enables easy and
+user-friendly embedding of user-defined YouTube and Vimeo videos.
 
-Video Link provides feedback to the user of the CMS immediately on whether the
-URL they pasted into the field is a valid video, and provides the title and a
-link to the video.
+Have you ever asked your users to input just the code of a YouTube video into
+an ExpressionEngine text field? Or allowed the user to paste in the entire URL
+of a YouTube video, but then had to parse out the code in order to do
+something useful? Then Video Link is what you need.
 
 ## A note about support
 
