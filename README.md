@@ -46,3 +46,15 @@ Set "Video Link" as the Field Type.
 * `{your-field-name:embed}` – An iframe embed. Use
   `{your-file-name:embed width="620"}` or
   `{your-file-name:embed width="500" height="380"}` to include a size.
+
+# License
+
+Video Link is distributed under the MIT license. See LICENSE.md for more
+information.
+
+Some icons by [Yusuke Kamiyamane](http://p.yusukekamiyamane.com/). Licensed
+under a [Creative Commons Attribution 3.0
+License](http://creativecommons.org/licenses/by/3.0/).
+
+Loading gif by [ajaxload.info](http://www.ajaxload.info/). Free for use, but
+hey, they deserve a shout-out anyway.
