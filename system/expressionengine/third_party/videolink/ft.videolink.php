@@ -10,7 +10,16 @@ class Videolink_ft extends EE_Fieldtype {
 	function __construct()
 	{
 		parent::__construct();
-		$this->cache = array('includes' => array());
+
+		if (! isset($this->EE->session->cache['videolink']))
+		{
+			$this->EE->session->cache['videolink'] = array();
+		}
+		$this->cache =& $this->EE->session->cache['videolink'];
+
+		if (!isset($this->cache['includes'])) {
+			$this->cache['includes'] = array();
+		}
 	}
 
 	/**
@@ -65,6 +74,13 @@ class Videolink_ft extends EE_Fieldtype {
 		$this->_include_theme_js('js/videolink.js');
 		$this->_include_theme_css('css/videolink.css');
 		return '<div class="videolink"><input type="url" name="field_id_' . $this->field_id . '" value="' . $data . '"></div>';
+	}
+
+	function display_cell($data)
+	{
+		$this->_include_theme_js('js/videolink.js');
+		$this->_include_theme_css('css/videolink.css');
+		return '<div class="videolink"><input type="url" name="' . $this->cell_name . '" value="' . $data . '"></div>';
 	}
 
 	/**
