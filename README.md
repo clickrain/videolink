@@ -29,7 +29,7 @@ it's not working. Go forth and Open Source.
 ExpressionEngine's third-party add-ons directory. (e.g.
 `/system/expressionengine/third_party/`)
 2. Copy the "themes/third_party/videolink" folder to ExpressionEngine's third-
-party themes directory. (e.g. `/themes/third_party/navee/`)
+party themes directory. (e.g. `/themes/third_party/videolink/`)
 3. Log into your ExpressionEngine control panel.
 4. Open the Field Types tab.
 5. Click "Install" by "Video List".
