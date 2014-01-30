@@ -45,8 +45,13 @@ Set "Video Link" as the Field Type.
 * `{your-field-name:embed_url}` – A URL that is fit for embedding. E.g.
   "//www.youtube.com/embed/XXXXX" or "//player.vimeo.com/video/XXXXX"
 * `{your-field-name:embed}` – An iframe embed. Use
-  `{your-file-name:embed width="620"}` or
-  `{your-file-name:embed width="500" height="380"}` to include a size.
+  `{your-field-name:embed width="620"}` or
+  `{your-field-name:embed width="500" height="380"}` to include a size.
+* `{your-field-name:type}` – returns either "youtube", "vimeo", or "unknown".
+* `{your-field-name:valid}` – returns "yes" for YouTube and Vimeo URLs, and
+  an empty string for unknown URLs.
+* `{if your-field-name:valid}...{/if}` – determine if a valid YouTube or Vimeo
+  embed has been entered.
 
 # License
 

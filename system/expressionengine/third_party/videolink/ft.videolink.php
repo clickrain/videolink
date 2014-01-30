@@ -129,6 +129,37 @@ class Videolink_ft extends EE_Fieldtype {
 		return '<a href="' . $data . '" target="_blank">' . $data . '</a>';
 	}
 
+	function replace_embed_url($data, $params = array(), $tagdata = FALSE)
+	{
+		$url = $this->get_embed_url($data);
+		if (!is_null($url)) {
+			return $url;
+		}
+		return $data;
+	}
+
+	function replace_type($data, $params = array(), $tagdata = FALSE)
+	{
+		if ($this->is_youtube($data)) {
+			return "youtube";
+		}
+		if ($this->is_vimeo($data)) {
+			return "vimeo";
+		}
+		return "unknown";
+	}
+
+	function replace_valid($data, $params = array(), $tagdata = FALSE)
+	{
+		if ($this->is_youtube($data)) {
+			return "yes";
+		}
+		if ($this->is_vimeo($data)) {
+			return "yes";
+		}
+		return "";
+	}
+
 	function get_embed_iframe($data, $width = NULL, $height = NULL) {
 		if ($this->is_youtube($data)) {
 			$url = $this->get_embed_url($data);
@@ -139,15 +170,6 @@ class Videolink_ft extends EE_Fieldtype {
 			return $this->build_embed_vimeo($url, $width, $height);
 		}
 		return NULL;
-	}
-
-	function replace_embed_url($data, $params = array(), $tagdata = FALSE)
-	{
-		$url = $this->get_embed_url($data);
-		if (!is_null($url)) {
-			return $url;
-		}
-		return $data;
 	}
 
 	function get_embed_url($data) {
