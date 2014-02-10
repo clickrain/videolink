@@ -11,7 +11,7 @@ jQuery(function($) {
 		getTitle: function(code, callback) {
 			$.ajax({
 				dataType: 'jsonp',
-				url: 'http://gdata.youtube.com/feeds/api/videos/' + code + '?v=2&alt=jsonc',
+				url: '//gdata.youtube.com/feeds/api/videos/' + code + '?v=2&alt=jsonc',
 				success: function(data) {
 					if (data.data) {
 						callback(null, data.data.title);
@@ -41,7 +41,7 @@ jQuery(function($) {
 			var status = null;
 			$.ajax({
 				dataType: 'jsonp',
-				url: 'http://vimeo.com/api/v2/video/' + code + '.json',
+				url: '//vimeo.com/api/v2/video/' + code + '.json',
 				success: function(data) {
 					if (status == 'error') {
 						return;
