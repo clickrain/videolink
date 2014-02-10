@@ -34,7 +34,7 @@ class Videolink_ft extends EE_Fieldtype {
 		if (! in_array($file, $this->cache['includes']))
 		{
 			$this->cache['includes'][] = $file;
-			$this->EE->cp->add_to_foot('<script type="text/javascript" src="'.$this->_theme_url().$file.'"></script>');
+			$this->EE->cp->add_to_foot('<script type="text/javascript" src="'.$this->_theme_url().$file.'?version='.$this->info['version'].'"></script>');
 		}
 	}
 
@@ -42,7 +42,7 @@ class Videolink_ft extends EE_Fieldtype {
 		if (! in_array($file, $this->cache['includes']))
 		{
 			$this->cache['includes'][] = $file;
-			$this->EE->cp->add_to_head('<link rel="stylesheet" href="'.$this->_theme_url().$file.'">');
+			$this->EE->cp->add_to_head('<link rel="stylesheet" href="'.$this->_theme_url().$file.'?version='.$this->info['version'].'">');
 		}
 	}
 
