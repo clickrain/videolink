@@ -109,7 +109,6 @@ jQuery(function($) {
 				status.removeClass('loading noservice error').addClass('success');
 				status.empty();
 
-				console.log(data.thumbnail.hqDefault);
 				$('<a class="videolink-thumblink">').attr('href', service.getUrl(code)).attr('target', '_blank').html('<figure class="videolink-thumb"><img src="' + data.thumbnail + '" alt="' + data.title + '"><figcaption class="videolink-thumbcaption">' + data.title + '</figcaption></figure>').appendTo(status);
 			}
 		});
