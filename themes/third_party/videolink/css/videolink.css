@@ -25,3 +25,21 @@
 .videolink .status.error:before {
 	background-image: url(../images/error.png);
 }
+.videolink-thumblink {
+	
+}
+.videolink-thumb {
+	display: -moz-inline-stack;
+	display: inline-block;
+	vertical-align: middle;
+	zoom: 1;
+	max-width: 200px;
+	margin: .5em;
+}
+.videolink-thumb img {
+	max-width: 100%;
+	height: auto;
+}
+.videolink-thumbcaption {
+
+}
