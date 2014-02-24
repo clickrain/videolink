@@ -148,4 +148,23 @@ jQuery(function($) {
 			videolink.find('input').val('');
 		});
 	}
+
+	if (typeof(window.Grid) !== 'undefined') {
+		Grid.bind('videolink', 'display', function(cell) {
+			// When Matrix addes a new videolink, initialize it.
+			var videolink = $(cell).find('.videolink');
+			initializeElement(videolink);
+		});
+
+		Grid.bind('videolink', 'remove', function(cell) {
+			// Because videolink inputs have a type of 'url', if a person
+			// removes a videolink from Grid that does not have a valid value,
+			// the browser will refuse to submit it (because it isn't a valid
+			// URL), but that won't be visisble to the user. So, when a user
+			// removes a videolink, just clear the value, so the browser
+			// doesn't do that.
+			var videolink = $(cell).find('.videolink');
+			videolink.find('input').val('');
+		});
+	}
 });
