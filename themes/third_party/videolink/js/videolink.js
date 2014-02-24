@@ -8,13 +8,17 @@ jQuery(function($) {
 				return parse[1];
 			}
 		},
-		getTitle: function(code, callback) {
+		getMetaData: function(code, callback) {
 			$.ajax({
 				dataType: 'jsonp',
 				url: '//gdata.youtube.com/feeds/api/videos/' + code + '?v=2&alt=jsonc',
 				success: function(data) {
 					if (data.data) {
-						callback(null, data.data.title);
+						var result = {
+							title: data.data.title,
+							thumbnail: data.data.thumbnail.hqDefault
+						};
+						callback(null, result);
 					}
 					else {
 						callback('Failed to get title');
@@ -37,7 +41,7 @@ jQuery(function($) {
 				return parse[1];
 			}
 		},
-		getTitle: function(code, callback) {
+		getMetaData: function(code, callback) {
 			var status = null;
 			$.ajax({
 				dataType: 'jsonp',
@@ -47,7 +51,11 @@ jQuery(function($) {
 						return;
 					}
 					status = 'success';
-					callback(null, data[0].title);
+					var result = {
+						title: data[0].title,
+						thumbnail: data[0].thumbnail_medium
+					};
+					callback(null, result);
 				}
 			});
 			setTimeout(function() {
@@ -77,30 +85,31 @@ jQuery(function($) {
 	}
 
 	function updateStatus(status, val) {
-		status.addClass('loading').removeClass('noservice').removeClass('error').removeClass('success').text('loading');
+		status.addClass('loading').removeClass('noservice error success').text('loading');
 
 		if (!val || val.match(/^\s*$/)) {
-			status.removeClass('loading').addClass('noservice').removeClass('error').removeClass('success');
+			status.addClass('noservice').removeClass('error loading success');
 			status.text('');
 			return;
 		}
 
 		var service = getService(val);
 		if (!service) {
-			status.removeClass('loading').addClass('noservice').removeClass('error').removeClass('success');
+			status.addClass('noservice').removeClass('error loading success');
 			status.text('Video not found');
 			return;
 		}
 		var code = service.getCode(val);
-		service.getTitle(code, function(err, title) {
+		service.getMetaData(code, function(err, data) {
 			if (err) {
-				status.removeClass('loading').removeClass('noservice').addClass('error').removeClass('success');
+				status.removeClass('loading noservice success').addClass('error');
 				status.text('Error getting data. Are you sure this is a valid ' + service.name + ' URL?');
 			}
 			else {
-				status.removeClass('loading').removeClass('noservice').removeClass('error').addClass('success');
+				status.removeClass('loading noservice error').addClass('success');
 				status.empty();
-				$('<a>').attr('href', service.getUrl(code)).attr('target', '_blank').text(title).appendTo(status);
+
+				$('<a class="videolink-thumblink">').attr('href', service.getUrl(code)).attr('target', '_blank').html('<figure class="videolink-thumb"><img src="' + data.thumbnail + '" alt="' + data.title + '"><figcaption class="videolink-thumbcaption">' + data.title + '</figcaption></figure>').appendTo(status);
 			}
 		});
 	}
