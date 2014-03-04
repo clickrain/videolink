@@ -4,7 +4,7 @@ class Videolink_ft extends EE_Fieldtype {
 
 	var $info = array(
 		'name'		=> 'Video Link',
-		'version'	=> '1.0.2'
+		'version'	=> '1.1.0'
 	);
 
 	function __construct()
