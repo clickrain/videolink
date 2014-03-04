@@ -47,6 +47,9 @@ Set "Video Link" as the Field Type.
 * `{your-field-name:embed}` – An iframe embed. Use
   `{your-field-name:embed width="620"}` or
   `{your-field-name:embed width="500" height="380"}` to include a size.
+* `{your-field-name:title}` – The title of the video.
+* `{your-field-name:thumbnail}` – The thumbnail of the video. *Note: this is
+  an 'http:' URL, because that is what both YouTube and Vimeo return.*
 * `{your-field-name:type}` – returns either "youtube", "vimeo", or "unknown".
 * `{your-field-name:valid}` – returns "yes" for YouTube and Vimeo URLs, and
   an empty string for unknown URLs.

@@ -22,6 +22,25 @@ class Videolink_ft extends EE_Fieldtype {
 		}
 	}
 
+	function _extract_data($data) {
+		// Matrix gives us back $data as an array.
+		if (is_array($data)) {
+			$video = new stdClass();
+			$video->url = isset($data['url']) ? $data['url'] : '';
+			$video->title = isset($data['title']) ? $data['title'] : '';
+			$video->thumbnail = isset($data['thumbnail']) ? $data['thumbnail'] : '';
+			return $video;
+		}
+
+		$datas = explode('|', $data);
+
+		$video = new stdClass();
+		$video->url = $datas[0];
+		$video->title = isset($datas[1]) ? $datas[1] : '';
+		$video->thumbnail = isset($datas[2]) ? $datas[2] : '';
+		return $video;
+	}
+
 	/**
 	 * Allow the Field Type to show up in a Grid.
 	 */
@@ -71,16 +90,26 @@ class Videolink_ft extends EE_Fieldtype {
 	 */
 	function display_field($data)
 	{
-		$this->_include_theme_js('js/videolink.js');
-		$this->_include_theme_css('css/videolink.css');
-		return '<div class="videolink"><input type="url" name="field_id_' . $this->field_id . '" value="' . $data . '"></div>';
+		return $this->_display($data, $this->field_name);
 	}
 
 	function display_cell($data)
 	{
+		return $this->_display($data, $this->cell_name);
+	}
+
+	function _display($data, $name) {
+		$obj = $this->_extract_data($data);
+
 		$this->_include_theme_js('js/videolink.js');
 		$this->_include_theme_css('css/videolink.css');
-		return '<div class="videolink"><input type="url" name="' . $this->cell_name . '" value="' . $data . '"></div>';
+		return <<<EOF
+<div class="videolink">
+	<input type="url" name="{$name}[url]" value="{$obj->url}">
+	<input data-title type="hidden" name="{$name}[title]" value="{$obj->title}">
+	<input data-thumbnail type="hidden" name="{$name}[thumbnail]" value="{$obj->thumbnail}">
+</div>
+EOF;
 	}
 
 	/**
@@ -92,7 +121,19 @@ class Videolink_ft extends EE_Fieldtype {
 	 */
 	function save($data)
 	{
-		return $this->EE->input->post('field_id_' . $this->field_id);
+		$url = $data['url'];
+		$title = $data['title'];
+		$thumbnail = $data['thumbnail'];
+
+		return $url . '|' . $title . '|' . $thumbnail;
+	}
+
+	function save_cell($data) {
+		$url = $data['url'];
+		$title = $data['title'];
+		$thumbnail = $data['thumbnail'];
+
+		return $url . '|' . $title . '|' . $thumbnail;
 	}
 
 	/**
@@ -107,11 +148,31 @@ class Videolink_ft extends EE_Fieldtype {
 	 */
 	function replace_tag($data, $params = array(), $tagdata = FALSE)
 	{
-		return $data;
+		$video = $this->_extract_data($data);
+		return $video->url;
+	}
+
+	function replace_url($data, $params = array(), $tagdata = FALSE)
+	{
+		$video = $this->_extract_data($data);
+		return $video->url;
+	}
+
+	function replace_title($data, $params = array(), $tagdata = FALSE)
+	{
+		$video = $this->_extract_data($data);
+		return $video->title;
+	}
+
+	function replace_thumbnail($data, $params = array(), $tagdata = FALSE)
+	{
+		$video = $this->_extract_data($data);
+		return $video->thumbnail;
 	}
 
 	function replace_embed($data, $params = array(), $tagdata = FALSE)
 	{
+		$video = $this->_extract_data($data);
 		$width = NULL;
 		$height = NULL;
 
@@ -122,7 +183,7 @@ class Videolink_ft extends EE_Fieldtype {
 			$height = intval($params['height']);
 		}
 
-		$embed = $this->get_embed_iframe($data, $width, $height);
+		$embed = $this->get_embed_iframe($video->url, $width, $height);
 		if (!is_null($embed)) {
 			return $embed;
 		}
@@ -131,7 +192,8 @@ class Videolink_ft extends EE_Fieldtype {
 
 	function replace_embed_url($data, $params = array(), $tagdata = FALSE)
 	{
-		$url = $this->get_embed_url($data);
+		$video = $this->_extract_data($data);
+		$url = $this->get_embed_url($video->url);
 		if (!is_null($url)) {
 			return $url;
 		}
@@ -140,10 +202,11 @@ class Videolink_ft extends EE_Fieldtype {
 
 	function replace_type($data, $params = array(), $tagdata = FALSE)
 	{
-		if ($this->is_youtube($data)) {
+		$video = $this->_extract_data($data);
+		if ($this->is_youtube($video->url)) {
 			return "youtube";
 		}
-		if ($this->is_vimeo($data)) {
+		if ($this->is_vimeo($video->url)) {
 			return "vimeo";
 		}
 		return "unknown";
@@ -151,35 +214,38 @@ class Videolink_ft extends EE_Fieldtype {
 
 	function replace_valid($data, $params = array(), $tagdata = FALSE)
 	{
-		if ($this->is_youtube($data)) {
+		$video = $this->_extract_data($data);
+		if ($this->is_youtube($video->url)) {
 			return "yes";
 		}
-		if ($this->is_vimeo($data)) {
+		if ($this->is_vimeo($video->url)) {
 			return "yes";
 		}
 		return "";
 	}
 
 	function get_embed_iframe($data, $width = NULL, $height = NULL) {
-		if ($this->is_youtube($data)) {
-			$url = $this->get_embed_url($data);
+		$video = $this->_extract_data($data);
+		if ($this->is_youtube($video->url)) {
+			$url = $this->get_embed_url($video->url);
 			return $this->build_embed_youtube($url, $width, $height);
 		}
-		if ($this->is_vimeo($data)) {
-			$url = $this->get_embed_url($data);
+		if ($this->is_vimeo($video->url)) {
+			$url = $this->get_embed_url($video->url);
 			return $this->build_embed_vimeo($url, $width, $height);
 		}
 		return NULL;
 	}
 
 	function get_embed_url($data) {
-		if ($this->is_youtube($data)) {
-			$parsed = $this->parse_youtube($data);
+		$video = $this->_extract_data($data);
+		if ($this->is_youtube($video->url)) {
+			$parsed = $this->parse_youtube($video->url);
 
 			return '//www.youtube.com/embed/' . $parsed['key'];
 		}
-		if ($this->is_vimeo($data)) {
-			$parsed = $this->parse_vimeo($data);
+		if ($this->is_vimeo($video->url)) {
+			$parsed = $this->parse_vimeo($video->url);
 
 			return '//player.vimeo.com/video/' . $parsed['key'];
 		}

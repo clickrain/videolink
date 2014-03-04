@@ -8,13 +8,16 @@ jQuery(function($) {
 				return parse[1];
 			}
 		},
-		getTitle: function(code, callback) {
+		getData: function(code, callback) {
 			$.ajax({
 				dataType: 'jsonp',
 				url: '//gdata.youtube.com/feeds/api/videos/' + code + '?v=2&alt=jsonc',
 				success: function(data) {
 					if (data.data) {
-						callback(null, data.data.title);
+						callback(null, {
+							'title': data.data.title,
+							'thumbnail': data.data.thumbnail.hqDefault
+						});
 					}
 					else {
 						callback('Failed to get title');
@@ -37,7 +40,7 @@ jQuery(function($) {
 				return parse[1];
 			}
 		},
-		getTitle: function(code, callback) {
+		getData: function(code, callback) {
 			var status = null;
 			$.ajax({
 				dataType: 'jsonp',
@@ -47,7 +50,10 @@ jQuery(function($) {
 						return;
 					}
 					status = 'success';
-					callback(null, data[0].title);
+					callback(null, {
+						'title': data[0].title,
+						'thumbnail': data[0].thumbnail_large
+					});
 				}
 			});
 			setTimeout(function() {
@@ -92,15 +98,24 @@ jQuery(function($) {
 			return;
 		}
 		var code = service.getCode(val);
-		service.getTitle(code, function(err, title) {
+		service.getData(code, function(err, data) {
 			if (err) {
 				status.removeClass('loading').removeClass('noservice').addClass('error').removeClass('success');
 				status.text('Error getting data. Are you sure this is a valid ' + service.name + ' URL?');
+
+				status.closest('.videolink').find('[data-title]').val('');
+				status.closest('.videolink').find('[data-thumbnail]').val('');
 			}
 			else {
+				var title = data.title;
+				var thumbnail = data.thumbnail;
+
 				status.removeClass('loading').removeClass('noservice').removeClass('error').addClass('success');
 				status.empty();
 				$('<a>').attr('href', service.getUrl(code)).attr('target', '_blank').text(title).appendTo(status);
+
+				status.closest('.videolink').find('[data-title]').val(title);
+				status.closest('.videolink').find('[data-thumbnail]').val(thumbnail);
 			}
 		});
 	}
