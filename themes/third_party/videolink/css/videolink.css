@@ -1,3 +1,12 @@
+/**
+ * EE fieldtypes need to add their own 11px top margin to the controls. But
+ * this is only needed when the field type is being used as a top level field,
+ * not as a grid field.
+ */
+.publish_field fieldset.holder > .videolink {
+	margin-top: 11px;
+}
+
 .videolink .status {
 	padding: 5px 0;
 }
