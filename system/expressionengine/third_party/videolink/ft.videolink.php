@@ -183,7 +183,7 @@ EOF;
 			$height = intval($params['height']);
 		}
 
-		$embed = $this->get_embed_iframe($video->url, $width, $height);
+		$embed = $this->get_embed_iframe($video->url, $width, $height, $params);
 		if (!is_null($embed)) {
 			return $embed;
 		}
@@ -193,7 +193,7 @@ EOF;
 	function replace_embed_url($data, $params = array(), $tagdata = FALSE)
 	{
 		$video = $this->_extract_data($data);
-		$url = $this->get_embed_url($video->url);
+		$url = $this->get_embed_url($video->url, $params);
 		if (!is_null($url)) {
 			return $url;
 		}
@@ -224,30 +224,68 @@ EOF;
 		return "";
 	}
 
-	function get_embed_iframe($data, $width = NULL, $height = NULL) {
+	function get_embed_iframe($data, $width = NULL, $height = NULL, $params = array()) {
 		$video = $this->_extract_data($data);
 		if ($this->is_youtube($video->url)) {
-			$url = $this->get_embed_url($video->url);
-			return $this->build_embed_youtube($url, $width, $height);
+			$url = $this->get_embed_url($video->url, $params);
+			return $this->build_embed_youtube($url, $width, $height, $params);
 		}
 		if ($this->is_vimeo($video->url)) {
-			$url = $this->get_embed_url($video->url);
-			return $this->build_embed_vimeo($url, $width, $height);
+			$url = $this->get_embed_url($video->url, $params);
+			return $this->build_embed_vimeo($url, $width, $height, $params);
 		}
 		return NULL;
 	}
 
-	function get_embed_url($data) {
+	function get_parameters($prefix, $params, $defaults = array()) {
+		$ret = array();
+		$prefix = $prefix . ':';
+		$prefixlength = strlen($prefix);
+		foreach ($params as $key => $value) {
+			if (substr($key, 0, $prefixlength) === $prefix) {
+				$ret[substr($key, $prefixlength)] = $value;
+			}
+		}
+		$ret = array_merge($defaults, $ret);
+		return $ret;
+	}
+
+	function format_url_parameters($params) {
+		$ret = '';
+		foreach ($params as $key => $value) {
+			if ($ret === '') {
+				$ret .= '?';
+			}
+			else {
+				$ret .= '&amp;';
+			}
+			$ret .= urlencode($key) . '=' . urlencode($value);
+		}
+		return $ret;
+	}
+
+	function format_iframe_parameters($params) {
+		$ret = '';
+		foreach ($params as $key => $value) {
+			$ret .= ' ' . $key . '="' . htmlentities($value) . '"';
+		}
+		return $ret;
+	}
+
+	function get_embed_url($data, $params) {
 		$video = $this->_extract_data($data);
 		if ($this->is_youtube($video->url)) {
 			$parsed = $this->parse_youtube($video->url);
+			$default = array('rel' => 0);
+			$params = $this->get_parameters('youtube', $params, $default);
 
-			return '//www.youtube.com/embed/' . $parsed['key'];
+			return '//www.youtube.com/embed/' . $parsed['key'] . $this->format_url_parameters($params);
 		}
 		if ($this->is_vimeo($video->url)) {
 			$parsed = $this->parse_vimeo($video->url);
+			$params = $this->get_parameters('vimeo', $params);
 
-			return '//player.vimeo.com/video/' . $parsed['key'];
+			return '//player.vimeo.com/video/' . $parsed['key'] . $this->format_url_parameters($params);
 		}
 		return NULL;
 	}
@@ -268,7 +306,7 @@ EOF;
 			);
 	}
 
-	function build_embed_youtube($url, $width = NULL, $height = NULL)
+	function build_embed_youtube($url, $width = NULL, $height = NULL, $params)
 	{
 		if (is_null($width)) {
 			$width = 560;
@@ -276,7 +314,14 @@ EOF;
 		if (is_null($height)) {
 			$height = round($width * (315/560));
 		}
-		return '<iframe width="' . $width . '" height="' . $height . '" src="' . $url . '?rel=0" frameborder="0" allowfullscreen></iframe>';
+
+		$defaults = array(
+			'frameborder' => '0'
+			);
+		$iframe_params = $this->get_parameters('iframe', $params, $defaults);
+		$formatted = $this->format_iframe_parameters($iframe_params);
+
+		return '<iframe width="' . $width . '" height="' . $height . '" src="' . $url . '" allowfullscreen' . $formatted . '></iframe>';
 	}
 
 	function is_vimeo($url) {
@@ -293,7 +338,7 @@ EOF;
 			);
 	}
 
-	function build_embed_vimeo($url, $width = NULL, $height = NULL)
+	function build_embed_vimeo($url, $width = NULL, $height = NULL, $params)
 	{
 		if (is_null($width)) {
 			$width = 500;
@@ -301,6 +346,13 @@ EOF;
 		if (is_null($height)) {
 			$height = round($width * (281/500));
 		}
-		return '<iframe src="' . $url . '" width="' . $width . '" height="' . $height . '" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>';
+
+		$defaults = array(
+			'frameborder' => '0'
+			);
+		$iframe_params = $this->get_parameters('iframe', $params, $defaults);
+		$formatted = $this->format_iframe_parameters($iframe_params);
+
+		return '<iframe src="' . $url . '" width="' . $width . '" height="' . $height . '" webkitallowfullscreen mozallowfullscreen allowfullscreen' . $formatted . '></iframe>';
 	}
 }

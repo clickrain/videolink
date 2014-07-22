@@ -43,7 +43,7 @@ Set "Video Link" as the Field Type.
 * `{your-field-name}` – The entire URL that the user typed or pasted into the
   field.
 * `{your-field-name:embed_url}` – A URL that is fit for embedding. E.g.
-  "//www.youtube.com/embed/XXXXX" or "//player.vimeo.com/video/XXXXX"
+  `//www.youtube.com/embed/XXXXX` or `//player.vimeo.com/video/XXXXX`
 * `{your-field-name:embed}` – An iframe embed. Use
   `{your-field-name:embed width="620"}` or
   `{your-field-name:embed width="500" height="380"}` to include a size.
@@ -56,6 +56,29 @@ Set "Video Link" as the Field Type.
 * `{if your-field-name:valid}...{/if}` – determine if a valid YouTube or Vimeo
   embed has been entered.
 
+## Pass-through parameters
+
+For `{your-field-name:embed}` and `{your-field-name:embed_url}`, you can pass
+parameters that will get added to the appropriate embedded URL. Prefix the
+parameter with the video service, and the parameter will be added when the URL
+is created.
+
+For example, using the following tag,
+
+```
+{your-field-name:embed youtube:showinfo="0" vimeo:title="0" vimeo:byline="0"}
+```
+
+If the video is a YouTube video, it will use the URL
+`//www.youtube.com/embed/XXXXX?rel=0&showinfo=0`. If the video is a Vimeo
+video, it will use the URL `//player.vimeo.com/video/XXXXXX?title=0&byline=0`.
+
+Note: YouTube videos default to `youtube:rel="0"`, but you may override that
+with `youtube:rel=1`.
+
+Consult the respective official documentation for [YouTube options][opts-yt]
+and [Vimeo options][opts-vm].
+
 # License
 
 Video Link is distributed under the MIT license. See LICENSE.md for more
@@ -67,3 +90,6 @@ License](http://creativecommons.org/licenses/by/3.0/).
 
 Loading gif by [ajaxload.info](http://www.ajaxload.info/). Free for use, but
 hey, they deserve a shout-out anyway.
+
+[opts-yt]: https://developers.google.com/youtube/player_parameters
+[opts-vm]: http://developer.vimeo.com/player/embedding
