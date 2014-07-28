@@ -241,9 +241,12 @@ EOF;
 		$ret = array();
 		$prefix = $prefix . ':';
 		$prefixlength = strlen($prefix);
-		foreach ($params as $key => $value) {
-			if (substr($key, 0, $prefixlength) === $prefix) {
-				$ret[substr($key, $prefixlength)] = $value;
+
+		if (is_array($params)) {
+			foreach ($params as $key => $value) {
+				if (substr($key, 0, $prefixlength) === $prefix) {
+					$ret[substr($key, $prefixlength)] = $value;
+				}
 			}
 		}
 		$ret = array_merge($defaults, $ret);
