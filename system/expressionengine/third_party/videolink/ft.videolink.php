@@ -294,14 +294,23 @@ EOF;
 	}
 
 	function is_youtube($url) {
-		return preg_match("/^\s*https?:\/\/(www\.)?youtube\.com\/.*v=.*/", $url);
+		return preg_match("/^\s*https?:\/\/(www\.)?youtube\.com\/.*v=.*/", $url)
+			|| preg_match("/^\s*https?:\/\/youtu\.be\/[^&]*/", $url);
 	}
 
 	function parse_youtube($url) {
 		$parsed = parse_url($url);
-		$query = $parsed['query'];
-		parse_str($query, $queryvars);
-		$key = $queryvars['v'];
+
+		if ($parsed['host'] === 'youtu.be') {
+			// youtu.be/KEY
+			$key = substr($parsed['path'], 1);
+		}
+		else {
+			// youtube.com/watch?v=[KEY]
+			$query = $parsed['query'];
+			parse_str($query, $queryvars);
+			$key = $queryvars['v'];
+		}
 
 		return array(
 			'service' => 'youtube',

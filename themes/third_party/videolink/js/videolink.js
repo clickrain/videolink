@@ -7,6 +7,10 @@ jQuery(function($) {
 			if (parse && parse[1]) {
 				return parse[1];
 			}
+			parse = url.match(/https?:\/\/youtu.be\/([^?&]*)/);
+			if (parse && parse[1]) {
+				return parse[1];
+			}
 		},
 		getData: function(code, callback) {
 			$.ajax({
