@@ -83,24 +83,29 @@ jQuery(function($) {
 	}
 
 	function updateStatus(status, val) {
-		status.addClass('loading').removeClass('noservice').removeClass('error').removeClass('success').text('loading');
+		status.removeClass('empty noservice error success');
+		status.addClass('loading');
+		status.text('loading');
 
 		if (!val || val.match(/^\s*$/)) {
-			status.removeClass('loading').addClass('noservice').removeClass('error').removeClass('success');
+			status.removeClass('loading noservice error success');
+			status.addClass('empty');
 			status.text('');
 			return;
 		}
 
 		var service = getService(val);
 		if (!service) {
-			status.removeClass('loading').addClass('noservice').removeClass('error').removeClass('success');
+			status.removeClass('empty loading error success');
+			status.addClass('noservice');
 			status.text('Video not found');
 			return;
 		}
 		var code = service.getCode(val);
 		service.getData(code, function(err, data) {
 			if (err) {
-				status.removeClass('loading').removeClass('noservice').addClass('error').removeClass('success');
+				status.removeClass('empty loading noservice success');
+				status.addClass('error');
 				status.text('Error getting data. Are you sure this is a valid ' + service.name + ' URL?');
 
 				status.closest('.videolink').find('[data-title]').val('');
@@ -110,7 +115,8 @@ jQuery(function($) {
 				var title = data.title;
 				var thumbnail = data.thumbnail;
 
-				status.removeClass('loading').removeClass('noservice').removeClass('error').addClass('success');
+				status.removeClass('empty loading noservice error');
+				status.addClass('success');
 				status.empty();
 				$('<a>').attr('href', service.getUrl(code)).attr('target', '_blank').text(title).appendTo(status);
 

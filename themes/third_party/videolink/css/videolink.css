@@ -19,11 +19,17 @@
 	background: transparent none no-repeat center center;
 	vertical-align: middle;
 }
+.videolink .status.empty {
+
+}
 .videolink .status.loading:before {
 	background-image: url(../images/loading.gif);
 }
 .videolink .status.noservice {
-
+	color: red;
+}
+.videolink .status.noservice:before {
+	background-image: url(../images/error.png);
 }
 .videolink .status.success:before {
 	background-image: url(../images/success.png);
