@@ -46,7 +46,15 @@ class Videolink_ft extends EE_Fieldtype {
 	 */
 	public function accepts_content_type($name)
 	{
-		return ($name == 'channel' || $name == 'grid');
+		switch ($name) {
+			case 'channel':
+			case 'grid':
+			case 'blocks/1':
+				return true;
+
+			default:
+				return false;
+		}
 	}
 
 	protected function _include_theme_js($file) {
