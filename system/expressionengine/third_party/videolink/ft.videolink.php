@@ -133,7 +133,13 @@ EOF;
 		$title = $data['title'];
 		$thumbnail = $data['thumbnail'];
 
-		return $url . '|' . $title . '|' . $thumbnail;
+		// Only save all data if there is a URL.
+		if ($url != '') {
+			return $url . '|' . $title . '|' . $thumbnail;
+		}
+		else {
+			return '';
+		}
 	}
 
 	function save_cell($data) {
@@ -141,7 +147,13 @@ EOF;
 		$title = $data['title'];
 		$thumbnail = $data['thumbnail'];
 
-		return $url . '|' . $title . '|' . $thumbnail;
+		// Only save all data if there is a URL.
+		if ($url != '') {
+			return $url . '|' . $title . '|' . $thumbnail;
+		}
+		else {
+			return '';
+		}
 	}
 
 	/**
