@@ -133,7 +133,12 @@ EOF;
 		$title = $data['title'];
 		$thumbnail = $data['thumbnail'];
 
-		return $url . '|' . $title . '|' . $thumbnail;
+		// prevent submitting title & thumbnail data if there's no url!
+	        if($url != "") {      
+	            return $url . '|' . $title . '|' . $thumbnail;
+	        } else {
+	            return "";
+	        }
 	}
 
 	function save_cell($data) {
@@ -141,7 +146,12 @@ EOF;
 		$title = $data['title'];
 		$thumbnail = $data['thumbnail'];
 
-		return $url . '|' . $title . '|' . $thumbnail;
+		// prevent submitting title & thumbnail data if there's no url!
+	        if($url != "") {      
+	            return $url . '|' . $title . '|' . $thumbnail;
+	        } else {
+	            return "";
+	        }
 	}
 
 	/**
