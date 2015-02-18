@@ -32,7 +32,7 @@ ExpressionEngine's third-party add-ons directory. (e.g.
 party themes directory. (e.g. `/themes/third_party/videolink/`)
 3. Log into your ExpressionEngine control panel.
 4. Open the Field Types tab.
-5. Click "Install" by "Video List".
+5. Click "Install" by "Video Link".
 
 ## Usage
 
