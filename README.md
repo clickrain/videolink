@@ -38,6 +38,37 @@ party themes directory. (e.g. `/themes/third_party/videolink/`)
 
 Set "Video Link" as the Field Type.
 
+## Google API Key
+
+Starting in April 2015, Google requires an API Key in order to query YouTube
+data, so this add-on needs an API Key. To get this key, follow the following
+instructions.
+
+1.  Navigate to [console.developers.google.com][googleconsole]
+2.  Create a project
+    * Select "Create a project..." from the "Select a project" dropdown
+    * Name the project something reasonable
+    * Select "Create"
+3.  Enable the YouTube Data API for the project
+    * Select "APIs & Auth" -> "APIs" in the sidebar
+    * Select on "YouTube Data API"
+    * Select on "Enable"
+4. Create an API Key
+    * Select "APIs & Auth" -> Credentials" in the sidebar
+    * Select "Create new Key"
+    * Select "Browser Key"
+    * _(Optional)_ Enter the URL of the ExpressionEngine control pannel in the
+      HTTP referrers for security
+    * Select "Create"
+5. Add the API Key to ExpressionEngine's config
+    * Copy the new API Key
+    * If you use [master config][masterconfig], put
+      `$env_config['videolink:googleapikey'] = 'your new api key';` in
+      config.master.php
+    * If you do not use master config, put
+      `$env_config['videolink:googleapikey'] = 'your new api key';` in
+      system/expressionengine/config/config.php
+
 ## Tags
 
 * `{your-field-name}` – The entire URL that the user typed or pasted into the
@@ -93,3 +124,5 @@ hey, they deserve a shout-out anyway.
 
 [opts-yt]: https://developers.google.com/youtube/player_parameters
 [opts-vm]: http://developer.vimeo.com/player/embedding
+[googleconsole]: https://console.developers.google.com)
+[masterconfig]: https://github.com/focuslabllc/ee-master-config

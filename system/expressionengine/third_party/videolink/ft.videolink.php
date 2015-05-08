@@ -111,8 +111,11 @@ class Videolink_ft extends EE_Fieldtype {
 
 		$this->_include_theme_js('js/videolink.js');
 		$this->_include_theme_css('css/videolink.css');
+
+		$google_api_key = $this->EE->config->item('videolink:googleapikey');
+
 		return <<<EOF
-<div class="videolink">
+<div class="videolink" data-googleapi-key="$google_api_key">
 	<input type="url" name="{$name}[url]" value="{$obj->url}">
 	<input data-title type="hidden" name="{$name}[title]" value="{$obj->title}">
 	<input data-thumbnail type="hidden" name="{$name}[thumbnail]" value="{$obj->thumbnail}">

@@ -13,14 +13,25 @@ jQuery(function($) {
 			}
 		},
 		getData: function(code, callback) {
+			// Get the key from the videolink element. Well, any videolink
+			// element. They should all be the same.
+			var key = $('.videolink[data-googleapi-key]').first().attr('data-googleapi-key');
+			if (key === null || key === '') {
+				callback({ type: 'invalidkey', text: 'Invalid Google API Key' });
+				return;
+			}
+
 			$.ajax({
 				dataType: 'jsonp',
-				url: '//gdata.youtube.com/feeds/api/videos/' + code + '?v=2&alt=jsonc',
+				url: 'https://www.googleapis.com/youtube/v3/videos?part=snippet&id=' + code + '&key=' + key,
 				success: function(data) {
-					if (data.data) {
+					if (data.error && data.error.errors && data.error.errors[0] && data.error.errors[0].reason === 'keyInvalid') {
+						callback({ type: 'invalidkey', text: 'Invalid Google API Key' });
+					}
+					else if (data.items && data.items.length > 0) {
 						callback(null, {
-							'title': data.data.title,
-							'thumbnail': data.data.thumbnail.hqDefault
+							'title': data.items[0].snippet.title,
+							'thumbnail': data.items[0].snippet.thumbnails.maxres
 						});
 					}
 					else {
@@ -110,7 +121,12 @@ jQuery(function($) {
 			if (err) {
 				status.removeClass('empty loading noservice success');
 				status.addClass('error');
-				status.text('Error getting data. Are you sure this is a valid ' + service.name + ' URL?');
+				if (err.type === 'invalidkey') {
+					status.text('Error getting data. Invalid ' + service.name + ' API key.');
+				}
+				else {
+					status.text('Error getting data. Are you sure this is a valid ' + service.name + ' URL?');
+				}
 
 				status.closest('.videolink').find('[data-title]').val('');
 				status.closest('.videolink').find('[data-thumbnail]').val('');
