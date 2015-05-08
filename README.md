@@ -66,7 +66,7 @@ instructions.
       `$env_config['videolink:googleapikey'] = 'your new api key';` in
       config.master.php
     * If you do not use master config, put
-      `$env_config['videolink:googleapikey'] = 'your new api key';` in
+      `$config['videolink:googleapikey'] = 'your new api key';` in
       system/expressionengine/config/config.php
 
 ## Tags
