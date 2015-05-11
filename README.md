@@ -124,5 +124,5 @@ hey, they deserve a shout-out anyway.
 
 [opts-yt]: https://developers.google.com/youtube/player_parameters
 [opts-vm]: http://developer.vimeo.com/player/embedding
-[googleconsole]: https://console.developers.google.com)
+[googleconsole]: https://console.developers.google.com
 [masterconfig]: https://github.com/focuslabllc/ee-master-config
