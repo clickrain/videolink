@@ -31,7 +31,7 @@ jQuery(function($) {
 					else if (data.items && data.items.length > 0) {
 						callback(null, {
 							'title': data.items[0].snippet.title,
-							'thumbnail': data.items[0].snippet.thumbnails.maxres
+							'thumbnail': data.items[0].snippet.thumbnails.high.url
 						});
 					}
 					else {
