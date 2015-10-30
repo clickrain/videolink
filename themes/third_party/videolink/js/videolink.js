@@ -50,9 +50,9 @@ jQuery(function($) {
 	var vimeo = {
 		name: 'Vimeo',
 		getCode: function(url) {
-			var parse = url.match(/https?:\/\/vimeo.com\/([0-9]+)/);
-			if (parse && parse[1]) {
-				return parse[1];
+			var parse = url.match(/https?:\/\/(?:www\.|player\.)?vimeo.com\/(?:channels\/(?:\w+\/)?|groups\/([^\/]*)\/videos\/|album\/(\d+)\/video\/|video\/|)(\d+)(?:$|\/|\?)/);
+			if (parse && parse[parse.length-1]) {
+				return parse[parse.length-1];
 			}
 		},
 		getData: function(code, callback) {

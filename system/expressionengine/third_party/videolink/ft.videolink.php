@@ -360,16 +360,17 @@ EOF;
 	}
 
 	function is_vimeo($url) {
-		return preg_match("/^\s*https?:\/\/vimeo\.com\/[0-9]+/", $url);
+		return preg_match("/https?:\/\/(?:www\.|player\.)?vimeo.com\/(?:channels\/(?:\w+\/)?|groups\/([^\/]*)\/videos\/|album\/(\d+)\/video\/|video\/|)(\d+)(?:$|\/|\?)/", $url);
 	}
 
 	function parse_vimeo($url) {
 		$parsed = parse_url($url);
-		$key =	substr($parsed['path'], 1);
+		$key = explode("/", $parsed['path']);
+		$key = explode("?", end($key));
 
 		return array(
 			'service' => 'vimeo',
-			'key' => $key
+			'key' => $key[0]
 			);
 	}
 
